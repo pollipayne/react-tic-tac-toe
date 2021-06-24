@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 import Board from './components/Board';
+import Square from './components/Square';
 
 const PLAYER_1 = 'X';
 const PLAYER_2 = 'O';
@@ -35,6 +36,21 @@ const App = () => {
   // You will need to create a method to change the square 
   //   When it is clicked on.
   //   Then pass it into the squares as a callback
+  const onClickCallback = (id) => {
+    const updatedSquares = [...squares];
+    let isTurnOfPlayerOne = true;
+    updatedSquares.forEach((row) => {row.forEach((square) => {
+        console.log(square.value)
+        if (square.id === id) {
+          let symbol = (isTurnOfPlayerOne ? PLAYER_1 : PLAYER_2)
+          square.value = symbol;
+    } isTurnOfPlayerOne = !isTurnOfPlayerOne
+    })
+      
+    });
+    setSquares(updatedSquares);
+  
+  };
 
 
   const checkForWinner = () => {
@@ -62,7 +78,7 @@ const App = () => {
         <button>Reset Game</button>
       </header>
       <main>
-        <Board squares={squares} />
+        <Board squares={squares} onClickCallback={onClickCallback}/>
       </main>
     </div>
   );
