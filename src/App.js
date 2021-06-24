@@ -4,8 +4,8 @@ import './App.css';
 import Board from './components/Board';
 import Square from './components/Square';
 
-const PLAYER_1 = 'X';
-const PLAYER_2 = 'O';
+const PLAYER_1 = 'x';
+const PLAYER_2 = 'o';
 
 const generateSquares = () => {
   const squares = [];
@@ -40,7 +40,6 @@ const App = () => {
     const updatedSquares = [...squares];
     let isTurnOfPlayerOne = true;
     updatedSquares.forEach((row) => {row.forEach((square) => {
-        console.log(square.value)
         if (square.id === id) {
           let symbol = (isTurnOfPlayerOne ? PLAYER_1 : PLAYER_2)
           square.value = symbol;
@@ -53,28 +52,52 @@ const App = () => {
   };
 
 
-  const checkForWinner = () => {
+  const checkForWinner = (squares) => {
     // Complete in Wave 3
-    // You will need to:
-    // 1. Go accross each row to see if 
-    //    3 squares in the same row match
-    //    i.e. same value
-    // 2. Go down each column to see if
-    //    3 squares in each column match
-    // 3. Go across each diagonal to see if 
-    //    all three squares have the same value.
 
-  }
+    
+    for (let i = 0; i < 3; i++) {
+      if (squares[0][i] === 'x' && squares[1][i] === 'x' && squares[2][i] === 'x') {
+        return 'x'
+      } else if (squares[i][0] == 'x' && squares[i][1] === 'x' && squares[i][2] === 'x') {
+        return 'x'
+      } else if (squares[0][i] === 'o' && squares[1][i] === 'o' && squares[2][i] === 'o') {
+        return 'o'
+    } else if (squares[i][0] == 'o' && squares[i][1] === 'o' && squares[i][2] === 'o') {
+      return 'o'
+    }
+
+    
+    if (squares[0][0] === 'x' && squares[1][1] === 'x' && squares[2][2] === 'x') {
+      return 'x'
+    } else if (squares[0][0] === 'o' && squares[1][1] === 'o' && squares[2][2] === 'o') {
+      return 'o'
+    } else if (squares[0][2] === 'x' && squares[1][1] === 'x' && squares[2][0]==='x') {
+      return 'x'
+    } else if (squares[0][2] === 'o' && squares[1][1] === 'o' && squares[2][0]==='o') {
+      return 'o'
+    };
+
+    for (let i=0; i < squares.length; i++) {
+      for (let j=0; j < squares[i].length; j++) {
+        if (squares[i][j] == '') {
+          return null;
+        }
+      }
+    };
+    return "Tie";
+  };
+  
 
   const resetGame = () => {
     // Complete in Wave 4
-  }
+  };
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>React Tic Tac Toe</h1>
-        <h2>The winner is ... -- Fill in for wave 3 </h2>
+        <h2>The winner is {checkForWinner(squares)}</h2>
         <button>Reset Game</button>
       </header>
       <main>
@@ -82,6 +105,6 @@ const App = () => {
       </main>
     </div>
   );
-}
+};
 
 export default App;
