@@ -102,8 +102,9 @@ const App = () => {
   
   
   const resetGame = () => {
-    setSquares(generateSquares())
-    setIsWinner('')
+    setSquares(generateSquares());
+    setIsWinner('');
+    setisXTurn(true);
   };
 
   return (
