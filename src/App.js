@@ -24,13 +24,15 @@ const generateSquares = () => {
   }
 
   return squares;
-}
+};
 
 const App = () => {
 
   // This starts state off as a 2D array of JS objects with
   // empty value and unique ids.
   const [squares, setSquares] = useState(generateSquares());
+  const [isXTurn, setisXTurn] = useState(true);
+  const [isWinner, setIsWinner] = useState('')
 
   // Wave 2
   // You will need to create a method to change the square 
@@ -38,57 +40,66 @@ const App = () => {
   //   Then pass it into the squares as a callback
   const onClickCallback = (id) => {
     const updatedSquares = [...squares];
-    let isTurnOfPlayerOne = true;
-    updatedSquares.forEach((row) => {row.forEach((square) => {
-        if (square.id === id) {
-          let symbol = (isTurnOfPlayerOne ? PLAYER_1 : PLAYER_2)
-          square.value = symbol;
-    } isTurnOfPlayerOne = !isTurnOfPlayerOne
-    })
-      
-    });
-    setSquares(updatedSquares);
-  
+    for (let i=0; i<updatedSquares.length; i++) {
+      for (let j=0; j<updatedSquares[i].length; j++) {
+        if (updatedSquares[i][j].value && updatedSquares[i][j].id===id) {
+            return;
+        
+      }else if (isXTurn && updatedSquares[i][j].id === id) {
+          updatedSquares[i][j].value = PLAYER_1
+          setisXTurn(false)
+        } else if (updatedSquares[i][j].id === id) {
+          updatedSquares[i][j].value = PLAYER_2
+          setisXTurn(true)
+        }
+
+      }
+    }
+      setSquares(updatedSquares);
+      let winner = checkForWinner(updatedSquares);
+      setIsWinner(winner)
   };
+    
+
+ 
 
 
   const checkForWinner = (squares) => {
     // Complete in Wave 3
-
-    
     for (let i = 0; i < 3; i++) {
-      if (squares[0][i] === 'x' && squares[1][i] === 'x' && squares[2][i] === 'x') {
+      if (squares[0][i].value === 'x' && squares[1][i].value === 'x' && squares[2][i].value === 'x') {
         return 'x'
-      } else if (squares[i][0] == 'x' && squares[i][1] === 'x' && squares[i][2] === 'x') {
+      } else if (squares[i][0].value === 'x' && squares[i][1].value === 'x' && squares[i][2].value === 'x') {
         return 'x'
-      } else if (squares[0][i] === 'o' && squares[1][i] === 'o' && squares[2][i] === 'o') {
+      } else if (squares[0][i].value === 'o' && squares[1][i].value === 'o' && squares[2][i].value === 'o') {
         return 'o'
-    } else if (squares[i][0] == 'o' && squares[i][1] === 'o' && squares[i][2] === 'o') {
+    } else if (squares[i][0].value === 'o' && squares[i][1].value === 'o' && squares[i][2].value === 'o') {
       return 'o'
-    }
+    }};
 
     
-    if (squares[0][0] === 'x' && squares[1][1] === 'x' && squares[2][2] === 'x') {
+    if (squares[0][0].value === 'x' && squares[1][1].value === 'x' && squares[2][2].value === 'x') {
       return 'x'
-    } else if (squares[0][0] === 'o' && squares[1][1] === 'o' && squares[2][2] === 'o') {
+    } else if (squares[0][0].value === 'o' && squares[1][1].value === 'o' && squares[2][2].value === 'o') {
       return 'o'
-    } else if (squares[0][2] === 'x' && squares[1][1] === 'x' && squares[2][0]==='x') {
+    } else if (squares[0][2].value === 'x' && squares[1][1].value === 'x' && squares[2][0].value ==='x') {
       return 'x'
-    } else if (squares[0][2] === 'o' && squares[1][1] === 'o' && squares[2][0]==='o') {
+    } else if (squares[0][2].value === 'o' && squares[1][1].value === 'o' && squares[2][0].value ==='o') {
       return 'o'
     };
 
     for (let i=0; i < squares.length; i++) {
       for (let j=0; j < squares[i].length; j++) {
-        if (squares[i][j] == '') {
-          return null;
+        if (squares[i][j].value === '') {
+          return '';
         }
       }
-    };
-    return "Tie";
+    }
+    
+    return 'tie';
   };
   
-
+  
   const resetGame = () => {
     // Complete in Wave 4
   };
@@ -97,7 +108,7 @@ const App = () => {
     <div className="App">
       <header className="App-header">
         <h1>React Tic Tac Toe</h1>
-        <h2>The winner is {checkForWinner(squares)}</h2>
+        <h2>Winner is {isWinner} </h2>
         <button>Reset Game</button>
       </header>
       <main>
